@@ -1,0 +1,13 @@
+file,scene,objects,people_count,text_in_image,verified
+boat_dawn.png,lake,boat;mountain;water,0,null,False
+lake_night.jpg,lake,boat;mountain;tree;water,0,null,False
+lake_seed1.jpg,lake,boat;mountain;tree;water,0,null,False
+lake_seed2.jpg,lake,boat;mountain;tree;water,0,null,False
+lake_seed3.jpg,lake,boat;mountain;tree;water,0,null,False
+lake_swan.jpg,lake,mountain;swan;tree;water,0,null,False
+lake_wide_end.jpg,lake,boat;mountain;tree;water,0,null,False
+lake_wide.jpg,lake,boat;mountain;tree;water,0,null,False
+lake.jpg,lake,boat;mountain;tree;water,0,null,False
+parking.jpg,parking lot,car;parking space;road marking,0,null,False
+sheep.jpg,alpine pasture,grass;mountain;sheep,0,null,False
+street.jpg,city street,building;pedestrian;street sign;tram;tram track,8,Bahnhofstrasse,False

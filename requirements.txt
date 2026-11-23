@@ -1,0 +1,11 @@
+openai==3.57.0
+pandas==3.1.1
+numpy==2.4.6
+pillow==13.0.0
+matplotlib==3.11.2
+opencv-python-headless==5.1.0.95
+jupyter==1.1.1
+ipykernel==7.4.0
+jiwer==4.0.0
+pydantic==2.14.4
+scikit-learn==1.9.1

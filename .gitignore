@@ -1,0 +1,9 @@
+/.env
+.ipynb_checkpoints/
+__pycache__/
+/0*/api_log.jsonl
+/01_Image_Extraction/extracted.jsonl
+/02_Video_Timeline/timeline.jsonl
+/03_Prompt_Experiment/flow_images/
+/04_Storyboard_Consistency/*.mp4
+/0*/frames/
