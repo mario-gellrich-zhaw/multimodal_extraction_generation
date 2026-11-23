@@ -22,10 +22,10 @@ See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a
 
 | Notebook | What you will do |
 | --- | --- |
-| [1. Image folder → JSON → DataFrame](01_Image_Extraction/image_extraction.ipynb) | Extract structured records and score each field against draft labels. |
-| [2. Video → frames → JSON timeline](02_Video_Timeline/video_timeline.ipynb) | Sample one frame per second, transcribe time-stamped speech and build an event timeline. |
-| [3. Prompt experiment – Flow and API](03_Prompt_Experiment/prompt_experiment.ipynb) | Try a forward diffusion step, compare two prompts in Flow and score all six images. |
-| [4. Storyboard → clips → measure consistency](04_Storyboard_Consistency/storyboard_consistency.ipynb) | Plan four scenes, generate one clip and measure whether the character’s look stays consistent. |
+| [1. Image → JSON → DataFrame](01_Image_Extraction/image_extraction.ipynb) | Describe one image, ask for a fixed JSON format, extract a small folder into a table and score each field against draft labels. |
+| [2. Video → frames → JSON timeline](02_Video_Timeline/video_timeline.ipynb) | Cut a clip into one frame per second, describe the frames, transcribe the speech and merge both on one timeline. |
+| [3. Prompt experiment – Flow and API](03_Prompt_Experiment/prompt_experiment.ipynb) | Write a prompt from building blocks, vary one block, create three pictures per version in Flow and rate one feature by eye or with the API. |
+| [4. Storyboard → clips → measure consistency](04_Storyboard_Consistency/storyboard_consistency.ipynb) | Let the API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. Extension: join more scenes with ffmpeg. |
 
 The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic Flow results. Each notebook appends its API prompts, model IDs and raw outputs to a local, Git-ignored `api_log.jsonl`. Clear notebook outputs before sharing notebook edits.
 
@@ -35,4 +35,4 @@ The notebooks use `gpt-6-luna` for text and vision, replacing the slide example�
 
 Exercise 2 uses `whisper-1` at US$0.006 per audio minute for the slide’s segment timestamps. OpenAI marks this model deprecated and lists February 26, 2027 as the shutdown date. [Whisper pricing](https://developers.openai.com/api/docs/models/whisper-1) · [Speech-to-text timestamps](https://developers.openai.com/api/docs/guides/speech-to-text) · [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations)
 
-One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 39 short GPT-6 Luna calls and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Exercise 1 shows how to estimate the cost of a batch before you run it. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
+One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 38 short GPT-6 Luna calls (six of them optional in exercise 3) and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Exercise 1 shows how to estimate the cost of a batch before you run it. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
