@@ -1,6 +1,10 @@
 {
     "name": "Multimodal Extraction and Generation",
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "hostRequirements": {
+        "cpus": 4,
+        "storage": "32gb"
+    },
     "secrets": {
         "OPENAI_API_KEY": {
             "description": "Your OpenAI API key for the course exercises."
