@@ -14,7 +14,8 @@
         "vscode": {
             "extensions": [
                 "ms-python.python",
-                "ms-toolsai.jupyter"
+                "ms-toolsai.jupyter",
+                "Brodazz.mp4-player"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -22,7 +23,10 @@
                 "editor.rulers": [
                     80
                 ],
-                "workbench.iconTheme": "vs-seti"
+                "workbench.iconTheme": "vs-seti",
+                "workbench.editorAssociations": {
+                    "*.mp4": "mp4Player.preview"
+                }
             }
         },
         "codespaces": {

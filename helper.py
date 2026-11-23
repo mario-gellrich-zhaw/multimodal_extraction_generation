@@ -1,14 +1,15 @@
 """
 Helper functions for the exercise notebooks.
 
-All API calls in this file go to the OpenAI API (model gpt-6-luna and
-Whisper). Other providers, e.g. Google Gemini or Anthropic Claude, have
+All API calls in this file go to the OpenAI API (models gpt-6-luna,
+gpt-image-1-mini and Whisper). Other providers, e.g. Google Gemini or Anthropic Claude, have
 their own APIs with different code.
 
 OpenAI API (needs OPENAI_API_KEY):
     describe(prompt, path)              answer about one image as text
     ask(prompt, answer_format, images)  answer in a fixed format as a dict
     transcribe(video_path)              speech with start and end times
+    generate(prompt, path)              create one picture and save it
 
 No API:
     image_to_input(path)                image file -> OpenAI API input
@@ -38,6 +39,9 @@ DATA = Path(__file__).parent / "data"
 
 # The OpenAI model for text and images.
 MODEL = "gpt-6-luna"
+
+# The OpenAI model that creates pictures. A cheap model is enough here.
+IMAGE_MODEL = "gpt-image-1-mini"
 
 
 # ---------------------------------------------------------------------------
@@ -141,6 +145,27 @@ def transcribe(video_path):
     # 3. One row per speech segment.
     segments = response.model_dump()["segments"]
     return pd.DataFrame(segments)[["start", "end", "text"]]
+
+
+def generate(prompt, path):
+    """Create one picture from a prompt and save it as a PNG file."""
+    # 1. Ask the OpenAI Images API for one square picture.
+    #    Low quality is the cheapest setting and enough for this exercise.
+    response = connect().images.generate(
+        model=IMAGE_MODEL,
+        prompt=prompt,
+        size="1024x1024",
+        quality="low",
+        n=1,
+    )
+
+    # 2. The picture comes back as text (base64). Turn it into a file.
+    Path(path).parent.mkdir(exist_ok=True)
+    Path(path).write_bytes(base64.b64decode(response.data[0].b64_json))
+
+    # 3. Log the prompt and where the picture was saved.
+    write_log(prompt, IMAGE_MODEL, str(path))
+    return Path(path)
 
 
 # ---------------------------------------------------------------------------

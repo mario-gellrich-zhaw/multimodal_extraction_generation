@@ -8,7 +8,7 @@ Four Python 3.11 notebooks accompany the lecture. Allow about 20 minutes per exe
 
 1. Open this repository on GitHub. Select **Code → Codespaces → Create codespace** on the course branch. Wait for the Python 3.11 setup to finish. It installs ffmpeg, ffprobe and the Python packages.
 2. Enter your own course API key when Codespaces prompts for `OPENAI_API_KEY`. If you already have a codespace, open **GitHub → Settings → Codespaces → New secret**, name it `OPENAI_API_KEY`, paste your key into the secret value, and grant this repository access. Stop and restart the codespace to load the new secret. Keep your key out of notebooks, files and screenshots.
-3. Open the first notebook from the Explorer and choose the **Python 3.11** kernel. Run the cells from top to bottom. Pause at the manual Flow steps in exercises 3 and 4. In exercise 3, only the last section needs the API key.
+3. Open the first notebook from the Explorer and choose the **Python 3.11** kernel. Run the cells from top to bottom. Pause at the manual Flow steps in exercises 3 and 4. In exercise 3, only the last section needs the API key, unless you let the OpenAI API create the pictures instead of Flow.
 
 See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository) and [managing personal Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
 
@@ -23,9 +23,9 @@ See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a
 | Notebook | What you will do |
 | --- | --- |
 | [1. Image → JSON → DataFrame](01_Image_Extraction/image_extraction.ipynb) | Describe one image, ask for a fixed JSON format, extract the JPG images of a small folder into a table and score each field against draft labels. |
-| [2. Video → frames → JSON timeline](02_Video_Timeline/video_timeline.ipynb) | Cut a clip into one frame per second, describe the frames, transcribe the speech and merge both on one timeline. |
-| [3. Prompt experiment – Google Flow and OpenAI API](03_Prompt_Experiment/prompt_experiment.ipynb) | Write a prompt from building blocks, vary one block, create three pictures per version in Flow and rate one feature by eye and with the OpenAI API. |
-| [4. Storyboard → clips → measure consistency](04_Storyboard_Consistency/storyboard_consistency.ipynb) | Let the OpenAI API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. |
+| [2. Video → frames → JSON timeline](02_Video_Extraction/video_extraction.ipynb) | Cut a clip into one frame per second, describe the frames, transcribe the speech and merge both on one timeline. |
+| [3. Prompt experiment – Google Flow and OpenAI API](03_Image_Generation/image_generation.ipynb) | Write a prompt from building blocks, vary one block, create three pictures per version in Flow (or optionally with the OpenAI API) and rate one feature by eye and with the OpenAI API. |
+| [4. Storyboard → clips → measure consistency](04_Video_Generation/video_generation.ipynb) | Let the OpenAI API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. |
 
 Each exercise folder has two notebooks. In the notebook from the table, some code is missing: where you see `# TODO`, replace `...` with your own code. The finished version is next to it with the ending `_solution.ipynb`, for example `image_extraction_solution.ipynb`. Try the exercise first, then compare.
 
@@ -39,4 +39,6 @@ The notebooks use `gpt-6-luna` for text and vision through the OpenAI Responses 
 
 Exercise 2 uses `whisper-1` at US$0.006 per audio minute for the slide’s segment timestamps. OpenAI marks this model deprecated and lists February 26, 2027 as the shutdown date. [Whisper pricing](https://developers.openai.com/api/docs/models/whisper-1) · [Speech-to-text timestamps](https://developers.openai.com/api/docs/guides/speech-to-text) · [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations)
 
-One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 37 short GPT-6 Luna calls and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Exercise 1 shows how to estimate the cost of a batch before you run it: tokens per image × number of images × price. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
+Exercise 3 can optionally create its six pictures with `gpt-image-1-mini` at low quality (1024×1024) instead of Flow. Image output is billed at US$8 per million tokens; one picture used 272 output tokens, so about US$0.002 per picture and US$0.015 for all six. OpenAI marks this model deprecated; if it is shut down, change `IMAGE_MODEL` in `helper.py`. [gpt-image-1-mini model and pricing](https://developers.openai.com/api/docs/models/gpt-image-1-mini)
+
+One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 37 short GPT-6 Luna calls and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Creating the exercise 3 pictures with the OpenAI API adds about US$0.015. Exercise 1 shows how to estimate the cost of a batch before you run it: tokens per image × number of images × price. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
