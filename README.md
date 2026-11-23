@@ -27,7 +27,7 @@ See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a
 | [3. Prompt experiment – Flow and API](03_Prompt_Experiment/prompt_experiment.ipynb) | Write a prompt from building blocks, vary one block, create three pictures per version in Flow and rate one feature by eye or with the API. |
 | [4. Storyboard → clips → measure consistency](04_Storyboard_Consistency/storyboard_consistency.ipynb) | Let the API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. Extension: join more scenes with ffmpeg. |
 
-The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic Flow results. Each notebook appends its API prompts, model IDs and raw outputs to a local, Git-ignored `api_log.jsonl`. Clear notebook outputs before sharing notebook edits.
+The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic Flow results. The helper functions in each notebook append the prompt, model ID and raw output of every batch call to a local, Git-ignored `api_log.jsonl`. Clear notebook outputs before sharing notebook edits.
 
 ## API models and cost
 
