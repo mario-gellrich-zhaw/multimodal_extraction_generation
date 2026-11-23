@@ -1,12 +1,16 @@
 """
 Helper functions for the exercise notebooks.
 
+All API calls in this file go to the OpenAI API (Responses API, model gpt-6-luna).
+Other providers, e.g. Google Gemini or Anthropic Claude, have their own APIs
+with different code.
+
 The notebooks import what they need from this file:
 
-    image_to_input(path)                  turns an image file into an API input
-    ask(prompt, answer_format, images)    asks the model, returns a Python dict
-    describe(prompt, path)                asks the model about one image, returns text
-    extract_frames(video_path)            saves one frame per second as JPG files
+    image_to_input(path)                  turns an image file into an OpenAI API input
+    ask(prompt, answer_format, images)    asks the OpenAI model, returns a Python dict
+    describe(prompt, path)                asks the OpenAI model about one image, returns text
+    extract_frames(video_path)            saves one frame per second as JPG files (no API)
 
 Every answer from ask() and describe() is written to api_log.jsonl.
 """
@@ -24,12 +28,12 @@ from openai import OpenAI
 # Folder with the course images and videos (next to this file).
 DATA = Path(__file__).parent / "data"
 
-# Connect to OpenAI. The key is read from OPENAI_API_KEY; busy requests are retried.
+# Connect to the OpenAI API. The key is read from OPENAI_API_KEY; busy requests are retried.
 client = OpenAI(max_retries=5, timeout=60)
 MODEL = "gpt-6-luna"
 
 
-# Turn an image file into an API input.
+# Turn an image file into an OpenAI API input.
 def image_to_input(path):
     image_type = mimetypes.guess_type(path)[0]  # e.g. "image/jpeg"
     image_text = base64.b64encode(Path(path).read_bytes()).decode()  # bytes -> text
@@ -54,7 +58,7 @@ def ask(prompt, answer_format, images):
     for path in images:
         content.append(image_to_input(path))
 
-    # 2. Send the message. The answer must follow answer_format.
+    # 2. Send the message to the OpenAI Responses API. The answer must follow answer_format.
     response = client.responses.parse(
         model=MODEL,
         input=[{"role": "user", "content": content}],
@@ -79,7 +83,7 @@ def describe(prompt, path):
     # 1. Put the text and the image into one message.
     content = [{"type": "input_text", "text": prompt}, image_to_input(path)]
 
-    # 2. Send the message.
+    # 2. Send the message to the OpenAI Responses API.
     response = client.responses.create(
         model=MODEL,
         input=[{"role": "user", "content": content}],
