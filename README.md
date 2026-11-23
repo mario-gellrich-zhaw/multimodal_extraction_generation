@@ -25,13 +25,13 @@ See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a
 | [1. Image → JSON → DataFrame](01_Image_Extraction/image_extraction.ipynb) | Describe one image, ask for a fixed JSON format, extract three images (parking lot, alpine pasture, city street) into a table and score each field against draft labels. |
 | [2. Video → frames → JSON timeline](02_Video_Extraction/video_extraction.ipynb) | Cut a clip into one frame per second, describe the frames, transcribe the speech and merge both on one timeline. |
 | [3. Prompt experiment – Google Flow and OpenAI API](03_Image_Generation/image_generation.ipynb) | Write a prompt from building blocks, vary one block, let the OpenAI API create two pictures per version and rate one feature by eye and with the OpenAI API. |
-| [4. Storyboard → clips → measure consistency](04_Video_Generation/video_generation.ipynb) | Let the OpenAI API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. |
+| [4. Storyboard → clips → measure consistency](04_Video_Generation/video_generation.ipynb) | Let the OpenAI API draft a storyboard, generate one clip in Google Flow and check whether the character’s look matches the sheet. |
 
 Each exercise folder has two notebooks. In the notebook from the table, some code is missing: where you see `# TODO`, replace `...` with your own code. The finished version is next to it with the ending `_solution.ipynb`, for example `image_extraction_solution.ipynb`. Try the exercise first, then compare.
 
-The notebooks keep the exercise steps visible and import the technical parts from [helper.py](helper.py): the OpenAI API calls (`describe`, `ask`, `transcribe`), image encoding, logging, frame extraction, image display and the upload check. Open it to see how they work.
+The notebooks keep the exercise steps visible and import the technical parts from [helper.py](helper.py): the OpenAI API calls (`describe`, `ask`, `transcribe`, `generate`, `create_pictures`), image encoding, logging, frame extraction and image display. Open it to see how they work.
 
-The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic Google Flow results. Every OpenAI API call in `helper.py`, including Whisper, appends the prompt, model ID and raw answer to a local, Git-ignored `api_log.jsonl` in the exercise folder. Clear notebook outputs before sharing notebook edits.
+The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic results from Google Flow or the OpenAI API. Every OpenAI API call in `helper.py`, including Whisper, appends the prompt, model ID and raw answer to a local, Git-ignored `api_log.jsonl` in the exercise folder. Exercise 3 saves its pictures in the Git-ignored folder `variants/`. Clear notebook outputs before sharing notebook edits.
 
 ## API models and cost
 
