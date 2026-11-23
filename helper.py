@@ -1,16 +1,20 @@
 """
 Helper functions for the exercise notebooks.
 
-All API calls in this file go to the OpenAI API (Responses API, model gpt-6-luna).
-Other providers, e.g. Google Gemini or Anthropic Claude, have their own APIs
-with different code.
+All API calls in this file go to the OpenAI API
+(Responses API, model gpt-6-luna). Other providers, e.g. Google Gemini
+or Anthropic Claude, have their own APIs with different code.
 
 The notebooks import what they need from this file:
 
-    image_to_input(path)                  turns an image file into an OpenAI API input
-    ask(prompt, answer_format, images)    asks the OpenAI model, returns a Python dict
-    describe(prompt, path)                asks the OpenAI model about one image, returns text
-    extract_frames(video_path)            saves one frame per second as JPG files (no API)
+image_to_input(path)
+    Turns an image file into an OpenAI API input.
+ask(prompt, answer_format, images)
+    Asks the OpenAI model, returns the answer as a Python dict.
+describe(prompt, path)
+    Asks the OpenAI model about one image, returns the answer as text.
+extract_frames(video_path)
+    Saves one frame per second as JPG files (no API).
 
 Every answer from ask() and describe() is written to api_log.jsonl.
 """
@@ -28,15 +32,20 @@ from openai import OpenAI
 # Folder with the course images and videos (next to this file).
 DATA = Path(__file__).parent / "data"
 
-# Connect to the OpenAI API. The key is read from OPENAI_API_KEY; busy requests are retried.
+# Connect to the OpenAI API. The key is read from OPENAI_API_KEY.
+# Busy requests are retried up to 5 times.
 client = OpenAI(max_retries=5, timeout=60)
 MODEL = "gpt-6-luna"
 
 
-# Turn an image file into an OpenAI API input.
 def image_to_input(path):
+    """Turn an image file into an OpenAI API input."""
     image_type = mimetypes.guess_type(path)[0]  # e.g. "image/jpeg"
-    image_text = base64.b64encode(Path(path).read_bytes()).decode()  # bytes -> text
+
+    # The request is text, so the image bytes are converted to text.
+    image_bytes = Path(path).read_bytes()
+    image_text = base64.b64encode(image_bytes).decode()
+
     return {
         "type": "input_image",
         "image_url": f"data:{image_type};base64,{image_text}",
@@ -44,26 +53,27 @@ def image_to_input(path):
     }
 
 
-# Add one line with prompt, model and raw answer to api_log.jsonl.
 def write_log(prompt, answer):
+    """Add one line with prompt, model and raw answer to api_log.jsonl."""
     entry = {"prompt": prompt, "model": MODEL, "answer": answer}
     with open("api_log.jsonl", "a", encoding="utf-8") as log:
         log.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-# Send a prompt and a list of images, get the answer as a dict.
 def ask(prompt, answer_format, images):
+    """Send a prompt and a list of images, get the answer as a dict."""
     # 1. Put the text and the images into one message.
     content = [{"type": "input_text", "text": prompt}]
     for path in images:
         content.append(image_to_input(path))
 
-    # 2. Send the message to the OpenAI Responses API. The answer must follow answer_format.
+    # 2. Send the message to the OpenAI Responses API.
+    #    The answer must follow answer_format.
     response = client.responses.parse(
         model=MODEL,
         input=[{"role": "user", "content": content}],
         text_format=answer_format,
-        reasoning={"effort": "none"},  # no extra thinking: faster and cheaper
+        reasoning={"effort": "none"},  # no extra thinking: faster, cheaper
         store=False,  # OpenAI does not keep the answer
     )
 
@@ -72,16 +82,20 @@ def ask(prompt, answer_format, images):
 
     # 4. Stop with a clear message if there is no valid answer.
     if response.output_parsed is None:
-        raise ValueError(f"No valid answer for {images}. Look at api_log.jsonl.")
+        message = f"No valid answer for {images}. Look at api_log.jsonl."
+        raise ValueError(message)
 
     # 5. Return the answer as a Python dict.
     return response.output_parsed.model_dump()
 
 
-# Send a prompt and one image, get the answer as text.
 def describe(prompt, path):
+    """Send a prompt and one image, get the answer as text."""
     # 1. Put the text and the image into one message.
-    content = [{"type": "input_text", "text": prompt}, image_to_input(path)]
+    content = [
+        {"type": "input_text", "text": prompt},
+        image_to_input(path),
+    ]
 
     # 2. Send the message to the OpenAI Responses API.
     response = client.responses.create(
@@ -96,8 +110,8 @@ def describe(prompt, path):
     return response.output_text
 
 
-# Save one frame per second of a video as JPG files. Returns the file paths.
 def extract_frames(video_path, folder="frames", seconds=8):
+    """Save one frame per second as JPG files. Return the file paths."""
     # Create the folder and open the video.
     Path(folder).mkdir(exist_ok=True)
     video = cv2.VideoCapture(str(video_path))
