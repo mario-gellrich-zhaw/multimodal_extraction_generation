@@ -8,7 +8,7 @@ Four Python 3 notebooks accompany the lecture. Allow about 20 minutes per exerci
 
 1. Open this repository on GitHub. Select **Code → Codespaces → Create codespace** on the course branch. Wait for the Python 3.11 setup to finish. It installs ffmpeg, ffprobe and the Python packages.
 2. Enter your own course API key when Codespaces prompts for `OPENAI_API_KEY`. If you already have a codespace, open **GitHub → Settings → Codespaces → New secret**, name it `OPENAI_API_KEY`, paste your key into the secret value, and grant this repository access. Stop and restart the codespace to load the new secret. Keep your key out of notebooks, files and screenshots.
-3. Open the first notebook from the Explorer and choose the **Python 3** kernel. Run the numbered sections in order. Pause at the manual Flow steps in exercises 3 and 4.
+3. Open the first notebook from the Explorer and choose the **Python 3.11** kernel. Run the numbered sections in order. Pause at the manual Flow steps in exercises 3 and 4.
 
 See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository) and [managing personal Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
 
@@ -35,4 +35,4 @@ The notebooks use `gpt-6-luna` for text and vision, replacing the slide example�
 
 Exercise 2 uses `whisper-1` at US$0.006 per audio minute for the slide’s segment timestamps. OpenAI marks this model deprecated and lists February 26, 2027 as the shutdown date. [Whisper pricing](https://developers.openai.com/api/docs/models/whisper-1) · [Speech-to-text timestamps](https://developers.openai.com/api/docs/guides/speech-to-text) · [OpenAI deprecations](https://developers.openai.com/api/docs/deprecations)
 
-One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 39 short GPT-6 Luna calls and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Every API block prints an estimate. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
+One pass through all four required exercises is designed to stay below **CHF 1 per student**. With 39 short GPT-6 Luna calls and about eight seconds of Whisper audio, the OpenAI usage estimate is below US$0.10 at the listed rates, before exchange rates or taxes. Exercise 1 shows how to estimate the cost of a batch before you run it. Run each paid block once for the required work, since reruns also incur charges. Flow credits, Codespaces usage and any initial API billing top-up are separate from per-run API usage.
