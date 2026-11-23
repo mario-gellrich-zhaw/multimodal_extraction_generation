@@ -17,7 +17,12 @@
                 "ms-toolsai.jupyter"
             ],
             "settings": {
-                "python.defaultInterpreterPath": "/usr/local/bin/python"
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "workbench.colorTheme": "Default Dark+",
+                "editor.rulers": [
+                    80
+                ],
+                "workbench.iconTheme": "vs-seti"
             }
         },
         "codespaces": {
