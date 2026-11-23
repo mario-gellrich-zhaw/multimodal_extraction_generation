@@ -27,6 +27,8 @@ See [creating a codespace](https://docs.github.com/en/codespaces/developing-in-a
 | [3. Prompt experiment – Google Flow and OpenAI API](03_Prompt_Experiment/prompt_experiment.ipynb) | Write a prompt from building blocks, vary one block, create three pictures per version in Flow and rate one feature by eye and with the OpenAI API. |
 | [4. Storyboard → clips → measure consistency](04_Storyboard_Consistency/storyboard_consistency.ipynb) | Let the OpenAI API draft a storyboard, generate one clip and check whether the character’s look matches the sheet. |
 
+Each exercise folder has two notebooks. In the notebook from the table, some code is missing: where you see `# TODO`, replace `...` with your own code. The finished version is next to it with the ending `_solution.ipynb`, for example `image_extraction_solution.ipynb`. Try the exercise first, then compare.
+
 The notebooks keep the exercise steps visible and import the technical parts from [helper.py](helper.py): the OpenAI API calls (`describe`, `ask`, `transcribe`), image encoding, logging, frame extraction, image display and the upload check. Open it to see how they work.
 
 The supplied synthetic images, reference sheet and clips are under `data/`. All rows in `data/images/labels.csv` are draft labels for the lecturer to verify. Use `null` when no text is visible and `[unreadable]` when visible text cannot be read. Use only the supplied assets or synthetic Flow results. Every OpenAI API call in `helper.py`, including Whisper, appends the prompt, model ID and raw answer to a local, Git-ignored `api_log.jsonl` in the exercise folder. Clear notebook outputs before sharing notebook edits.
