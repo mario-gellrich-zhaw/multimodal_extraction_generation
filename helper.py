@@ -2,7 +2,7 @@
 Helper functions for the exercise notebooks.
 
 All API calls in this file go to the OpenAI API (models gpt-6-luna,
-gpt-image-1-mini and Whisper). Other providers, e.g. Google Gemini or
+gpt-image-2 and Whisper). Other providers, e.g. Google Gemini or
 Anthropic Claude, have their own APIs with different code.
 
 OpenAI API (needs OPENAI_API_KEY):
@@ -40,9 +40,8 @@ DATA = Path(__file__).parent / "data"
 # The OpenAI model for text and images.
 MODEL = "gpt-6-luna"
 
-# The OpenAI model that creates pictures. A cheap model is enough here.
-IMAGE_MODEL = "gpt-image-1-mini"
-
+# The OpenAI model that creates pictures (about US$0.006 per picture).
+IMAGE_MODEL = "gpt-image-2"
 
 # ---------------------------------------------------------------------------
 # OpenAI API
