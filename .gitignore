@@ -7,3 +7,4 @@ __pycache__/
 /03_Prompt_Experiment/flow_images/
 /04_Storyboard_Consistency/*.mp4
 /0*/frames/
+/04_Storyboard_Consistency/scenes.txt

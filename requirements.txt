@@ -1,6 +1,5 @@
 openai==3.57.0
 pandas==3.1.1
-numpy==2.4.6
 pillow==13.0.0
 matplotlib==3.11.2
 opencv-python-headless==5.1.0.95
