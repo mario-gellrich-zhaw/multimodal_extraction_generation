@@ -2,20 +2,20 @@
 Helper functions for the exercise notebooks.
 
 All API calls in this file go to the OpenAI API (models gpt-6-luna,
-gpt-image-1-mini and Whisper). Other providers, e.g. Google Gemini or Anthropic Claude, have
-their own APIs with different code.
+gpt-image-1-mini and Whisper). Other providers, e.g. Google Gemini or
+Anthropic Claude, have their own APIs with different code.
 
 OpenAI API (needs OPENAI_API_KEY):
     describe(prompt, path)              answer about one image as text
     ask(prompt, answer_format, images)  answer in a fixed format as a dict
     transcribe(video_path)              speech with start and end times
     generate(prompt, path)              create one picture and save it
+    create_pictures(names, prompts)     create a set of pictures as PNG files
 
 No API:
     image_to_input(path)                image file -> OpenAI API input
     extract_frames(video_path)          one frame per second as JPG files
     show_images(paths)                  images in a grid with file names
-    find_images(folder, names)          uploaded .jpg or .png files
 
 Every API answer is written to api_log.jsonl.
 """
@@ -168,6 +168,37 @@ def generate(prompt, path):
     return Path(path)
 
 
+def create_pictures(names, prompts, folder="variants"):
+    """Create one picture per name and prompt. Return the file paths.
+
+    The file pictures.json in the folder remembers the prompt and model
+    of every picture. An unchanged picture is kept, so you do not pay
+    twice. A picture whose prompt or model changed is created anew.
+    """
+    folder = Path(folder)
+    folder.mkdir(exist_ok=True)
+    record_file = folder / "pictures.json"
+    records = {}
+    if record_file.exists():
+        records = json.loads(record_file.read_text(encoding="utf-8"))
+
+    paths = []
+    for name, prompt in zip(names, prompts):
+        path = folder / f"{name}.png"
+        wanted = {"prompt": prompt, "model": IMAGE_MODEL}
+
+        # Create the picture only if it is missing or its prompt changed.
+        if path.exists() and records.get(name) == wanted:
+            print("Unchanged", name)
+        else:
+            generate(prompt, path)
+            records[name] = wanted
+            record_file.write_text(json.dumps(records, indent=2), encoding="utf-8")
+            print("Created", name)
+        paths.append(path)
+    return paths
+
+
 # ---------------------------------------------------------------------------
 # Images and videos (no API)
 # ---------------------------------------------------------------------------
@@ -210,18 +241,3 @@ def show_images(paths, columns=4):
         axes.flat[i].imshow(Image.open(paths[i]))
         axes.flat[i].set_title(Path(paths[i]).stem)
     plt.show()
-
-
-def find_images(folder, names):
-    """Find exactly one .jpg or .png file per name. Return the paths."""
-    folder = Path(folder)
-    folder.mkdir(exist_ok=True)
-
-    paths = []
-    for name in names:
-        found = list(folder.glob(name + ".jpg"))
-        found += list(folder.glob(name + ".png"))
-        message = f"{folder}/ needs exactly one {name}.jpg or {name}.png"
-        assert len(found) == 1, message
-        paths.append(found[0])
-    return paths

@@ -4,6 +4,6 @@ __pycache__/
 /0*/api_log.jsonl
 /01_Image_Extraction/extracted.jsonl
 /02_Video_Extraction/timeline.jsonl
-/03_Image_Generation/flow_images/
+/03_Image_Generation/variants/
 /04_Video_Generation/*.mp4
 /0*/frames/
