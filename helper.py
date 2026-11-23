@@ -15,9 +15,8 @@ No API:
     extract_frames(video_path)          one frame per second as JPG files
     show_images(paths)                  images in a grid with file names
     find_images(folder, names)          uploaded .jpg or .png files
-    join_clips(clips)                   joins video clips with ffmpeg
 
-Every API answer is written to api_log.jsonl, with its token counts.
+Every API answer is written to api_log.jsonl.
 """
 
 # Standard Python libraries.
@@ -25,7 +24,6 @@ import base64
 import json
 import math
 import mimetypes
-import subprocess
 from pathlib import Path
 
 # Libraries installed from requirements.txt.
@@ -48,7 +46,10 @@ MODEL = "gpt-6-luna"
 
 def connect():
     """Connect to the OpenAI API. The key is read from OPENAI_API_KEY."""
-    return OpenAI(max_retries=5, timeout=60)  # retry busy requests
+    # Retry with backoff: after a rate limit (429) or a timeout, the
+    # OpenAI library waits a little longer after each failed try and
+    # gives up after 5 retries. A call waits at most 60 seconds.
+    return OpenAI(max_retries=5, timeout=60)
 
 
 def image_to_input(path):
@@ -66,13 +67,9 @@ def image_to_input(path):
     }
 
 
-def write_log(prompt, model, answer, usage=None):
-    """Add one line with prompt, model, answer and tokens to the log."""
+def write_log(prompt, model, answer):
+    """Add one line with prompt, model and answer to api_log.jsonl."""
     entry = {"prompt": prompt, "model": model, "answer": answer}
-    if usage is not None:
-        entry["input_tokens"] = usage.input_tokens
-        entry["output_tokens"] = usage.output_tokens
-
     with open("api_log.jsonl", "a", encoding="utf-8") as log:
         log.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -94,7 +91,7 @@ def describe(prompt, path):
     )
 
     # 3. Log the answer and return it.
-    write_log(prompt, MODEL, response.output_text, response.usage)
+    write_log(prompt, MODEL, response.output_text)
     return response.output_text
 
 
@@ -116,7 +113,7 @@ def ask(prompt, answer_format, images):
     )
 
     # 3. Log the raw answer.
-    write_log(prompt, MODEL, response.output_text, response.usage)
+    write_log(prompt, MODEL, response.output_text)
 
     # 4. Stop with a clear message if there is no valid answer.
     if response.output_parsed is None:
@@ -203,20 +200,3 @@ def find_images(folder, names):
         assert len(found) == 1, message
         paths.append(found[0])
     return paths
-
-
-def join_clips(clips, output="film.mp4"):
-    """Join video clips into one film with ffmpeg, without re-encoding."""
-    # ffmpeg reads the list of clips from a text file.
-    with open("scenes.txt", "w", encoding="utf-8") as file:
-        for clip in clips:
-            file.write(f"file '{Path(clip).as_posix()}'\n")
-
-    # -c copy: the clips need the same format, resolution and frame rate.
-    # -safe 0: allows paths like ../data/...
-    command = [
-        "ffmpeg", "-y", "-f", "concat", "-safe", "0",
-        "-i", "scenes.txt", "-c", "copy", output,
-    ]
-    subprocess.run(command, check=True)
-    return Path(output)
