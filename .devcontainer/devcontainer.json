@@ -25,14 +25,14 @@
                 ],
                 "workbench.iconTheme": "vs-seti",
                 "workbench.editorAssociations": {
-                    "*.mp4": "mp4Player.preview"
+                    "*.mp4": "mp4Player.preview",
+                    "*.md": "vscode.markdown.preview.editor"
                 }
             }
         },
         "codespaces": {
             "openFiles": [
-                "README.md",
-                "01_Image_Extraction/image_extraction.ipynb"
+                "README.md"
             ]
         }
     },

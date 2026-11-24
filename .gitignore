@@ -8,3 +8,4 @@ __pycache__/
 /04_Video_Generation/*.mp4
 /0*/frames/
 /04_Video_Generation/reference/
+/0*/frames_*/

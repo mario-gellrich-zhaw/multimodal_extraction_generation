@@ -146,9 +146,9 @@ def transcribe(video_path):
     # 2. Log the answer.
     write_log("transcribe", "whisper-1", response.text)
 
-    # 3. One row per speech segment.
-    segments = response.model_dump()["segments"]
-    return pd.DataFrame(segments)[["start", "end", "text"]]
+    # 3. One row per speech segment. No speech gives an empty table.
+    segments = response.model_dump().get("segments") or []
+    return pd.DataFrame(segments, columns=["start", "end", "text"])
 
 
 def generate(prompt, path):
