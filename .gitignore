@@ -7,3 +7,4 @@ __pycache__/
 /03_Image_Generation/variants/
 /04_Video_Generation/*.mp4
 /0*/frames/
+/04_Video_Generation/reference/

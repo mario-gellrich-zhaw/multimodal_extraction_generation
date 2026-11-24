@@ -14,8 +14,10 @@ OpenAI API (needs OPENAI_API_KEY):
 
 No API:
     image_to_input(path)                image file -> OpenAI API input
+    video_info(video_path)              frames per second, frames, seconds
     extract_frames(video_path)          one frame per second as JPG files
     show_images(paths)                  images in a grid with file names
+    last_usage()                        tokens of the last API call
 
 Every API answer is written to api_log.jsonl.
 """
@@ -70,9 +72,12 @@ def image_to_input(path):
     }
 
 
-def write_log(prompt, model, answer):
-    """Add one line with prompt, model and answer to api_log.jsonl."""
+def write_log(prompt, model, answer, usage=None):
+    """Add one line with prompt, model, answer and tokens to api_log.jsonl."""
     entry = {"prompt": prompt, "model": model, "answer": answer}
+    if usage is not None:  # the exact token counts reported by the API
+        entry["input_tokens"] = usage.input_tokens
+        entry["output_tokens"] = usage.output_tokens
     with open("api_log.jsonl", "a", encoding="utf-8") as log:
         log.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -94,7 +99,7 @@ def describe(prompt, path):
     )
 
     # 3. Log the answer and return it.
-    write_log(prompt, MODEL, response.output_text)
+    write_log(prompt, MODEL, response.output_text, response.usage)
     return response.output_text
 
 
@@ -116,7 +121,7 @@ def ask(prompt, answer_format, images):
     )
 
     # 3. Log the raw answer.
-    write_log(prompt, MODEL, response.output_text)
+    write_log(prompt, MODEL, response.output_text, response.usage)
 
     # 4. Stop with a clear message if there is no valid answer.
     if response.output_parsed is None:
@@ -202,6 +207,15 @@ def create_pictures(names, prompts, folder="variants"):
 # Images and videos (no API)
 # ---------------------------------------------------------------------------
 
+def video_info(video_path):
+    """Return frames per second, number of frames and length of a video."""
+    video = cv2.VideoCapture(str(video_path))
+    fps = video.get(cv2.CAP_PROP_FPS)  # frames per second
+    frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    video.release()
+    return {"fps": fps, "frames": frames, "seconds": round(frames / fps, 2)}
+
+
 def extract_frames(video_path, folder="frames", seconds=8):
     """Save one frame per second as JPG files. Return the file paths."""
     # Create the folder and open the video.
@@ -240,3 +254,13 @@ def show_images(paths, columns=4):
         axes.flat[i].imshow(Image.open(paths[i]))
         axes.flat[i].set_title(Path(paths[i]).stem)
     plt.show()
+
+
+def last_usage():
+    """Return the input and output tokens of the last API call."""
+    lines = Path("api_log.jsonl").read_text(encoding="utf-8").splitlines()
+    entry = json.loads(lines[-1])
+    return {
+        "input_tokens": entry["input_tokens"],
+        "output_tokens": entry["output_tokens"],
+    }
